@@ -42,10 +42,10 @@ print("Syncing your secrets with the local state...")
 sync_command = ' bw sync'
 process = subprocess.check_output(sync_command, shell=True)
 
-# Export Vault to CSV
-print("Exporting all credentials to a CSV file...")
-CREDENTIALS_FILE_NAME = 'output.csv'
-export_command = f' bw export --output {CREDENTIALS_FILE_NAME} --format csv {BW_PASSWORD}'
+# Export Vault to encrypted JSON file
+print("Exporting all credentials to an encrypted JSON file...")
+CREDENTIALS_FILE_NAME = 'bw.json'
+export_command = f' bw export --output {CREDENTIALS_FILE_NAME} --format encrypted_json {BW_PASSWORD}'
 process = subprocess.check_output(export_command, shell=True)
 
 # Create 7z password-protected archive
@@ -57,6 +57,6 @@ if not os.path.exists('backups'):
 current_date = datetime.now().strftime('%Y_%m_%d')
 archive_filename = f'backups/bw_{current_date}.7z'
 with py7zr.SevenZipFile(archive_filename, mode='w', password=ARCHIVE_PASSWORD) as archive:
-    archive.write(f'./{CREDENTIALS_FILE_NAME}', 'base.csv')
+    archive.write(f'./{CREDENTIALS_FILE_NAME}', 'base.json')
 
-os.remove(CREDENTIALS_FILE_NAME) # Removing CSV file after it is archived
+os.remove(CREDENTIALS_FILE_NAME) # Removing JSON file after it is archived

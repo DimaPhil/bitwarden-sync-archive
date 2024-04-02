@@ -1,4 +1,5 @@
 # Project file ignorance
+backups/
 .env
 
 # Byte-compiled / optimized / DLL files
